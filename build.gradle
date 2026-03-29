@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'me.fallenbreath'
+version = project.version
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url = version.endsWith("SNAPSHOT") ? "https://maven.fallenbreath.me/snapshots" : "https://maven.fallenbreath.me/releases"
+            credentials(PasswordCredentials) {
+                username = 'fallen'
+                password = System.getenv("FALLENS_MAVEN_TOKEN")
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
